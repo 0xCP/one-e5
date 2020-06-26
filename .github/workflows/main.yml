@@ -25,6 +25,11 @@ jobs:
     - name: Run zouhua e5
       run: |
         python3 one.py --client-id ${{ secrets.ZOUHUA_CLIENT_ID }} --client-secret ${{ secrets.ZOUHUA_CLIENT_SECRET }} --tenant-id ${{ secrets.ZOUHUA_TENANT_ID }} --username ${{ secrets.ZOUHUA_USERNAME }}
+
     - name: Run vpsmm e5
       run: |
         python3 one.py --client-id ${{ secrets.VPSMM_CLIENT_ID }} --client-secret ${{ secrets.VPSMM_CLIENT_SECRET }} --tenant-id ${{ secrets.VPSMM_TENANT_ID }} --username ${{ secrets.VPSMM_USERNAME }}
+
+    - name: Run vpsmm linbing02
+      run: |
+        python3 one.py --client-id ${{ secrets.LB_CLIENT_ID }} --client-secret ${{ secrets.LB_CLIENT_SECRET }} --tenant-id ${{ secrets.LB_TENANT_ID }} --username ${{ secrets.LB_USERNAME }}

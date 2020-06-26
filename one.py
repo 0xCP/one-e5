@@ -139,8 +139,7 @@ class OneDrive:
         if response.ok:
             return response
 
-        result = response.json()
-        raise Exception(response.url, response.status_code, result['error']['message'])
+        raise Exception(response.url, response.status_code, response.text)
 
     def info(self, data):
         self.logger.info(j.dumps(data, indent=4))
