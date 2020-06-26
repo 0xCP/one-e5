@@ -16,11 +16,15 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
       with:
-        python-version: '3.6' 
-        
-    - name: Run zouhua
+        python-version: '3.6'
+
+    - name: requirements
+      run: |
+        pip3 install -r requirements.txt
+
+    - name: Run zouhua e5
       run: |
         python3 one.py --client-id ${{ secrets.ZOUHUA_CLENT_ID }} --client-secret ${{ secrets.ZOUHUA_CLENT_SECRET }} --tenant-id ${{ secrets.ZOUHUA_TENANT_ID }} --username ${{ secrets.ZOUHUA_USERNAME }}
-    - name: Run vpsmm
+    - name: Run vpsmm e5
       run: |
         python3 one.py --client-id ${{ secrets.VPSMM_CLENT_ID }} --client-secret ${{ secrets.VPSMM_CLENT_SECRET }} --tenant-id ${{ secrets.VPSMM_TENANT_ID }} --username ${{ secrets.VPSMM_USERNAME }}
