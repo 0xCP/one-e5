@@ -1,3 +1,4 @@
+import argparse
 import json as j
 import logging
 import os
@@ -20,7 +21,7 @@ class OneDrive:
         self.tenant_id = os.environ.get('tenant_id')
         self.client_id = os.environ.get('client_id')
         self.client_secret = os.environ.get('client_secret')
-        self.token = self.get_ms_token()
+        self.token = None
 
     def get_ms_token(self):
         url = f'https://login.microsoftonline.com/{self.tenant_id}/oauth2/v2.0/token'
@@ -146,7 +147,18 @@ class OneDrive:
 
 
 def script_main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--client-id')
+    parser.add_argument('--client-secret')
+    parser.add_argument('--tenant-id')
+    parser.add_argument('--username')
+    args = parser.parse_args()
+    params = vars(args)
+
     one = OneDrive()
+    for k, v in params.items():
+        if v and hasattr(one, k):
+            setattr(one, k, v)
 
     name = int(time.time())
     new_file = Path(f'/tmp/{name}.txt')
