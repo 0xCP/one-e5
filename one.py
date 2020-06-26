@@ -159,6 +159,7 @@ def script_main():
     for k, v in params.items():
         if v and hasattr(one, k):
             setattr(one, k, v)
+    one.token = one.get_ms_token()
 
     name = int(time.time())
     new_file = Path(f'/tmp/{name}.txt')
