@@ -1,0 +1,26 @@
+name: one e5
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '0 */2 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.6' 
+        
+    - name: Run zouhua
+      run: |
+        python3 one.py --client-id ${{ secrets.ZOUHUA_CLENT_ID }} --client-secret ${{ secrets.ZOUHUA_CLENT_SECRET }} --tenant-id ${{ secrets.ZOUHUA_TENANT_ID }} --username ${{ secrets.ZOUHUA_USERNAME }}
+    - name: Run vpsmm
+      run: |
+        python3 one.py --client-id ${{ secrets.VPSMM_CLENT_ID }} --client-secret ${{ secrets.VPSMM_CLENT_SECRET }} --tenant-id ${{ secrets.VPSMM_TENANT_ID }} --username ${{ secrets.VPSMM_USERNAME }}
