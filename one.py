@@ -112,8 +112,9 @@ class OneDrive:
         subscribed_list = self.api('/subscribedSkus')
         result = []
         for i in subscribed_list['value']:
-            result.append({'status': i['capabilityStatus'], 'sku_id': i['skuId'],
-                           'units': f'{i["consumedUnits"]}/{i["prepaidUnits"]["enabled"]}'})
+            if i['capabilityStatus'] == 'Enabled' and i['skuId'] != '6470687e-a428-4b7a-bef2-8a291ad947c9':
+                result.append({'status': i['capabilityStatus'], 'sku_id': i['skuId'],
+                               'units': f'{i["consumedUnits"]}/{i["prepaidUnits"]["enabled"]}'})
         return result
 
     def api(self, api_sub_url, params=None, data=None, method=None, **kwargs):
@@ -151,6 +152,7 @@ def script_main():
     parser.add_argument('--client-secret')
     parser.add_argument('--tenant-id')
     parser.add_argument('--username')
+    parser.add_argument('--action')
     args = parser.parse_args()
     params = vars(args)
 
@@ -159,6 +161,9 @@ def script_main():
         if v and hasattr(one, k):
             setattr(one, k, v)
     one.token = one.get_ms_token()
+
+    if params.get('action'):
+        return getattr(one, params.get('action'))()
 
     name = int(time.time())
     new_file = Path(f'/tmp/{name}.txt')
