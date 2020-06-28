@@ -187,8 +187,15 @@ def script_main():
             for user in users['value']:
                 if user['userPrincipalName'].find('root'):
                     continue
-                one.delete_user(user['userPrincipalName'])
+                try:
+                    one.delete_user(user['userPrincipalName'])
+                except Exception as e:
+                    one.logger.error(e)
         return {}
+    try:
+        one.create_user()
+    except Exception as e:
+        one.logger.error(e)
     return {}
 
 
