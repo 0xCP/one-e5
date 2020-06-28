@@ -178,7 +178,7 @@ def script_main():
             one.delete_file(Path(file['name']))
 
     one.mail_list()
-    log(one.subscribed_list())
+    one.site_list()
 
     a = random.randint(1, 2)
     if a == 1:
@@ -187,13 +187,10 @@ def script_main():
             for user in users['value']:
                 if user['userPrincipalName'].find('root'):
                     continue
-                try:
-                    one.delete_user(user['id'])
-                except Exception as e:
-                    print(e)
+                one.delete_user(user['id'])
     else:
         one.create_user()
-    return one.site_list()
+    return one.subscribed_list()
 
 
 def main_handler(event, context):
@@ -201,4 +198,7 @@ def main_handler(event, context):
 
 
 if __name__ == '__main__':
-    script_main()
+    try:
+        print(script_main())
+    except Exception as e:
+        print(e)
