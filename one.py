@@ -44,7 +44,7 @@ class OneDrive:
         return self.api(f'{drive}:/{src.name}:/content', method='DELETE')
 
     def file_list(self):
-        api_params = {'$select': 'id, name', '$top': 10}
+        api_params = {'$select': 'id, name', '$top': 20}
         return self.api(f'/users/{self.username}/drive/root/children', api_params)
 
     def mail_list(self):
@@ -52,7 +52,7 @@ class OneDrive:
         return self.api(f'/users/{self.username}/messages', api_params)
 
     def site_list(self):
-        api_params = {'search': '*', '$top': 10}
+        api_params = {'search': '*', '$top': 20, '$select': 'id, webUrl, displayName'}
         return self.api('/sites', api_params)
 
     def user_list(self):
@@ -188,15 +188,12 @@ def script_main():
                 if user['userPrincipalName'].find('root'):
                     continue
                 try:
-                    one.delete_user(user['userPrincipalName'])
+                    one.delete_user(user['id'])
                 except Exception as e:
-                    one.logger.error(e)
-        return {}
-    try:
+                    print(e)
+    else:
         one.create_user()
-    except Exception as e:
-        one.logger.error(e)
-    return {}
+    return one.site_list()
 
 
 def main_handler(event, context):
