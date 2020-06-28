@@ -156,6 +156,10 @@ def script_main():
     args = parser.parse_args()
     params = vars(args)
 
+    t = random.randint(5, 20)
+    time.sleep(t)
+    print(f'Wait {t} seconds.')
+
     one = OneDrive()
     for k, v in params.items():
         if v and hasattr(one, k):
@@ -190,8 +194,8 @@ def script_main():
                     continue
                 one.delete_user(user['userPrincipalName'])
                 break
-        return users
-    return one.create_user()
+        return {}
+    return {}
 
 
 def main_handler(event, context):
@@ -199,4 +203,4 @@ def main_handler(event, context):
 
 
 if __name__ == '__main__':
-    print(script_main())
+    script_main()
