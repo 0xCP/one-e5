@@ -142,8 +142,9 @@ class OneDrive:
 
         raise Exception(response.url, response.status_code, response.text)
 
-    def info(self, data):
-        self.logger.info(j.dumps(data, indent=4))
+
+def log(data):
+    print(j.dumps(data, indent=4))
 
 
 def script_main():
@@ -155,10 +156,6 @@ def script_main():
     parser.add_argument('--action')
     args = parser.parse_args()
     params = vars(args)
-
-    t = random.randint(5, 20)
-    time.sleep(t)
-    print(f'Wait {t} seconds.')
 
     one = OneDrive()
     for k, v in params.items():
@@ -179,11 +176,9 @@ def script_main():
     if len(files['value']) > 10:
         for file in files['value']:
             one.delete_file(Path(file['name']))
-    else:
-        one.info(files)
 
-    one.info(one.mail_list())
-    one.info(one.subscribed_list())
+    one.mail_list()
+    log(one.subscribed_list())
 
     a = random.randint(1, 2)
     if a == 1:
