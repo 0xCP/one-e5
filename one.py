@@ -56,7 +56,7 @@ class OneDrive:
         return self.api('/sites', api_params)
 
     def user_list(self):
-        api_params = {'$select': 'id, userPrincipalName', '$top': 10}
+        api_params = {'$select': 'id, userPrincipalName', '$top': 25}
         return self.api('/users', api_params)
 
     def delete_user(self, user):
@@ -188,7 +188,6 @@ def script_main():
                 if user['userPrincipalName'].find('root'):
                     continue
                 one.delete_user(user['userPrincipalName'])
-                break
         return {}
     return {}
 
