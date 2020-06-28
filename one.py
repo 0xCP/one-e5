@@ -44,7 +44,7 @@ class OneDrive:
         return self.api(f'{drive}:/{src.name}:/content', method='DELETE')
 
     def file_list(self):
-        api_params = {'$select': 'id, name', '$top': 20}
+        api_params = {'$select': 'id, name, folder', '$top': 20}
         return self.api(f'/users/{self.username}/drive/root/children', api_params)
 
     def mail_list(self):
@@ -167,7 +167,7 @@ def script_main():
         return getattr(one, params.get('action'))()
 
     name = int(time.time())
-    new_file = Path(f'/tmp/{name}.txt')
+    new_file = Path(f'{name}.txt')
     new_file.write_text(f'{name}')
     one.upload_file(new_file)
     new_file.unlink()
@@ -175,7 +175,8 @@ def script_main():
     files = one.file_list()
     if len(files['value']) > 10:
         for file in files['value']:
-            one.delete_file(Path(file['name']))
+            if not file.get('folder'):
+                one.delete_file(Path(file['name']))
 
     one.mail_list()
     one.site_list()
@@ -185,7 +186,7 @@ def script_main():
         users = one.user_list()
         if len(users['value']) > 10:
             for user in users['value']:
-                if user['userPrincipalName'].find('root'):
+                if user['userPrincipalName'].find('root') != -1 or user['userPrincipalName'].find('admin') != -1:
                     continue
                 one.delete_user(user['id'])
     else:
