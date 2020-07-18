@@ -9,6 +9,9 @@ from pathlib import Path
 
 import requests
 
+DEFAULT_FORMATTER = '%(asctime)s[%(filename)s:%(lineno)d][%(levelname)s]:%(message)s'
+logging.basicConfig(format=DEFAULT_FORMATTER, level=logging.INFO)
+
 
 class OneDrive:
 
