@@ -39,9 +39,9 @@ class OneDrive:
         drive = f'/users/{self.username}/drive/root'
         return self.api(f'{drive}:/{src.name}:/content', method='PUT', data=src.read_bytes())
 
-    def delete_file(self, src: Path):
-        drive = f'/users/{self.username}/drive/root'
-        return self.api(f'{drive}:/{src.name}:/content', method='DELETE')
+    def delete_file(self, file_id):
+        drive = f'/users/{self.username}/drive'
+        return self.api(f'{drive}/items/{file_id}', method='DELETE')
 
     def file_list(self):
         api_params = {'$select': 'id, name, folder', '$top': 20}
@@ -162,6 +162,7 @@ def script_main():
         if v and hasattr(one, k):
             setattr(one, k, v)
     one.token = one.get_ms_token()
+    one.logger.info(params)
 
     if params.get('action'):
         return getattr(one, params.get('action'))()
@@ -171,12 +172,13 @@ def script_main():
     new_file.write_text(f'{name}')
     one.upload_file(new_file)
     new_file.unlink()
+    one.logger.info('upload file done.')
 
     files = one.file_list()
     if len(files['value']) > 10:
         for file in files['value']:
             if not file.get('folder'):
-                one.delete_file(Path(file['name']))
+                one.delete_file(file['id'])
 
     one.mail_list()
     one.site_list()
@@ -191,7 +193,10 @@ def script_main():
                 one.delete_user(user['id'])
     else:
         one.create_user()
-    return one.subscribed_list()
+
+    subscribed_list = one.subscribed_list()
+    for subscribed in subscribed_list:
+        one.logger.info(subscribed)
 
 
 def main_handler(event, context):
@@ -199,7 +204,4 @@ def main_handler(event, context):
 
 
 if __name__ == '__main__':
-    try:
-        print(script_main())
-    except Exception as e:
-        print(e)
+    script_main()
