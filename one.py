@@ -85,10 +85,10 @@ class OneDrive:
             'usageLocation': 'HK'
         }
         data = self.api('/users', json=post_data, method='POST')
-        self.logger.info(f'{user_email}: {password} 创建完成.')
+        self.logger.info(f'{username} 创建完成.')
         if _subscribed and _subscribed.get('sku_id'):
             self._assign_license(user_email, _subscribed['sku_id'])
-            self.logger.info(f'{user_email}: 分配订阅完成.')
+            self.logger.info(f'{username}: 分配订阅完成.')
         return data
 
     def _assign_license(self, user_email, sku_id):
